@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                         String                @id @default(auto()) @map("_id") @db.ObjectId
+  email                      String
+  password                   String
+  name                       String
+  createdNavbar              Navbar[]
+  createdHomepagelabel       Homepagelabel[]
+  createdSlider              Slider[]
+  createdMakeup              Makeup[]
+  createdSkincare            Skincare[]
+  createdHair                Hair[]
+  createdBrush               Brush[]
+  createdProductpagelabel    Productpagelabel[]
+  createdCollectionimages    Collectionimages[]
+  createdFooter              Footer[]
+}
+
+model Navbar {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  lang     String
+  title    String
+  route    String
+  user     User   @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+}
+
+model Homepagelabel {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  lang     String
+  label    String
+  user     User   @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+}
+
+model Slider {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  lang     String
+  image    String
+  user     User   @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+}
+
+model Makeup {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  category  String
+  lang      String
+  title     String
+  descr     String
+  image     String
+  btn_text  String
+  price     String
+  quantity  Int?
+  path      String?
+  user     User   @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+}
+
+
+
+model Skincare {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  category  String
+  lang      String
+  title     String
+  descr     String
+  image     String
+  btn_text  String
+  price     String
+  quantity  Int?
+  path      String?
+  user     User   @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+}
+
+model Hair {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  category  String
+  lang      String
+  title     String
+  descr     String
+  image     String
+  btn_text  String
+  price     String
+  quantity  Int?
+  path      String?
+  user     User   @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+}
+
+model Brush {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  category  String
+  lang      String
+  title     String
+  descr     String
+  image     String
+  btn_text  String
+  price     String
+  quantity  Int?
+  path      String?
+  user     User   @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+}
+
+model Productpagelabel {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  lang          String
+  btn_text      String
+  basket_text   String
+  detail_text   String
+  delivery_text String
+  delivery      String?
+  note          String?
+  user     User   @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+}
+
+model Collectionimages {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  folder     String
+  image_name String
+  user       User   @relation(fields: [authorId], references: [id])
+  authorId   String @db.ObjectId
+}
+
+model Footer {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  lang     String
+  heading  String
+  links    String
+  info     String
+  user     User   @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+}
