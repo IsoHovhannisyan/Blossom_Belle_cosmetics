@@ -17,7 +17,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://blossom-belle-cosmetics.vercel.app/api/brush?lang=en',
+    'https://blossom-belle-cosmetics.vercel.app',
+    'https://blossom-belle-cosmetics-frontend.vercel.app',
   ],
   credentials: true
 }));
