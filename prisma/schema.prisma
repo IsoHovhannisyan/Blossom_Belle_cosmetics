@@ -137,6 +137,9 @@ model Basketpagelabel {
   total         String
   basket_clear  String
   checkout      String
+  mybasket      String?
+  data          String?
+  confirmation  String?
   user     User   @relation(fields: [authorId], references: [id])
   authorId String @db.ObjectId
 }
