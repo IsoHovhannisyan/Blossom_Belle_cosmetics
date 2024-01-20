@@ -23,6 +23,7 @@ model User {
   createdHair                Hair[]
   createdBrush               Brush[]
   createdProductpagelabel    Productpagelabel[]
+  createdBasketpagelabel     Basketpagelabel[]
   createdCollectionimages    Collectionimages[]
   createdFooter              Footer[]
 }
@@ -123,6 +124,19 @@ model Productpagelabel {
   delivery_text String
   delivery      String?
   note          String?
+  user     User   @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+}
+
+model Basketpagelabel {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  lang          String
+  title         String
+  btn_text      String
+  empty_text    String
+  total         String
+  basket_clear  String
+  checkout      String
   user     User   @relation(fields: [authorId], references: [id])
   authorId String @db.ObjectId
 }

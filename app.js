@@ -33,6 +33,7 @@ app.use('/api/hair', require('./routes/hair'));
 app.use('/api/brush', require('./routes/brush'));
 app.use('/api/collection_images', require("./routes/collection_images"));
 app.use('/api/product', require('./routes/product_page_label'));
+app.use('/api/basket', require('./routes/basket_page_label'));
 
 // app.use('/api/footer', require('./routes/footer'));
 
