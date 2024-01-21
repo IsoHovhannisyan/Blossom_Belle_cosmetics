@@ -140,6 +140,7 @@ model Basketpagelabel {
   mybasket      String?
   data          String?
   confirmation  String?
+  continueshop  String?  
   user     User   @relation(fields: [authorId], references: [id])
   authorId String @db.ObjectId
 }
