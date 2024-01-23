@@ -34,6 +34,7 @@ model Navbar {
   log         String
   navbar      String
   categories  String
+  delivery    String?
   user        User   @relation(fields: [authorId], references: [id])
   authorId    String @db.ObjectId
 }
