@@ -15,6 +15,7 @@ model User {
   email                      String
   password                   String
   name                       String
+  createdAuth                Author[]
   createdNavbar              Navbar[]
   createdHomepagelabel       Homepagelabel[]
   createdSlider              Slider[]
@@ -26,6 +27,16 @@ model User {
   createdBasketpagelabel     Basketpagelabel[]
   createdCollectionimages    Collectionimages[]
   createdFooter              Footer[]
+}
+
+model Author {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  lang        String
+  login       String
+  register    String
+  votes       String?
+  user        User   @relation(fields: [authorId], references: [id])
+  authorId    String @db.ObjectId
 }
 
 model Navbar {
