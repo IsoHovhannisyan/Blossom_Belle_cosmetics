@@ -67,65 +67,73 @@ model Slider {
 }
 
 model Makeup {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  category  String
-  lang      String
-  title     String
-  descr     String
-  image     String
-  btn_text  String
-  price     String
-  quantity  Int?
-  path      String?
-  user     User   @relation(fields: [authorId], references: [id])
-  authorId String @db.ObjectId
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  category    String
+  lang        String
+  title       String
+  descr       String
+  image       String
+  btn_text    String
+  price       String
+  quantity    Int?
+  path        String?
+  new         String?
+  best_seller String?
+  user        User   @relation(fields: [authorId], references: [id])
+  authorId    String @db.ObjectId
 }
 
 
 
 model Skincare {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  category  String
-  lang      String
-  title     String
-  descr     String
-  image     String
-  btn_text  String
-  price     String
-  quantity  Int?
-  path      String?
-  user     User   @relation(fields: [authorId], references: [id])
-  authorId String @db.ObjectId
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  category    String
+  lang        String
+  title       String
+  descr       String
+  image       String
+  btn_text    String
+  price       String
+  quantity    Int?
+  path        String?
+  new         String?
+  best_seller String?
+  user        User   @relation(fields: [authorId], references: [id])
+  authorId    String @db.ObjectId
 }
 
 model Hair {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
-  category  String
-  lang      String
-  title     String
-  descr     String
-  image     String
-  btn_text  String
-  price     String
-  quantity  Int?
-  path      String?
-  user     User   @relation(fields: [authorId], references: [id])
-  authorId String @db.ObjectId
+  category    String
+  lang        String
+  title       String
+  descr       String
+  image       String
+  btn_text    String
+  price       String
+  quantity    Int?
+  path        String?
+  new         String?
+  best_seller String?
+  user        User   @relation(fields: [authorId], references: [id])
+  authorId    String @db.ObjectId
 }
 
 model Brush {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  category  String
-  lang      String
-  title     String
-  descr     String
-  image     String
-  btn_text  String
-  price     String
-  quantity  Int?
-  path      String?
-  user     User   @relation(fields: [authorId], references: [id])
-  authorId String @db.ObjectId
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  category    String
+  lang        String
+  title       String
+  descr       String
+  image       String
+  btn_text    String
+  price       String
+  quantity    Int?
+  path        String?
+  new         String?
+  best_seller String?
+  user        User   @relation(fields: [authorId], references: [id])
+  authorId    String @db.ObjectId
 }
 
 model Productpagelabel {

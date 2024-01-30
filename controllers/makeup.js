@@ -11,8 +11,11 @@ const all = async (req, res) => {
 
     try {
         // const updatePrisma = await prisma.makeup.updateMany({
+        //     where: {
+        //         image: "/images/makeuplips/makeuplips_1704848055000_qLcs0nAWBMlZ8fBxyO0TR5Z1.jpg",
+        //     },
         //     data: {
-        //       path: 'makeup',
+        //       new: 'true',
         //     },
         //   });
         const products = await prisma.makeup.findMany(lang && {
