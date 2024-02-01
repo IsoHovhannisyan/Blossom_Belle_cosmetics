@@ -79,10 +79,10 @@ model Makeup {
   path        String?
   new         String?
   best_seller String?
+  sale        Int?
   user        User   @relation(fields: [authorId], references: [id])
   authorId    String @db.ObjectId
 }
-
 
 
 model Skincare {
@@ -98,6 +98,7 @@ model Skincare {
   path        String?
   new         String?
   best_seller String?
+  sale        Int?
   user        User   @relation(fields: [authorId], references: [id])
   authorId    String @db.ObjectId
 }
@@ -115,6 +116,7 @@ model Hair {
   path        String?
   new         String?
   best_seller String?
+  sale        Int?
   user        User   @relation(fields: [authorId], references: [id])
   authorId    String @db.ObjectId
 }
@@ -132,6 +134,7 @@ model Brush {
   path        String?
   new         String?
   best_seller String?
+  sale        Int?
   user        User   @relation(fields: [authorId], references: [id])
   authorId    String @db.ObjectId
 }

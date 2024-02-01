@@ -10,14 +10,43 @@ const all = async (req, res) => {
     const lang = req.query.lang || '';
 
     try {
-        // const updatePrisma = await prisma.makeup.updateMany({
-        //     where: {
-        //         image: "/images/makeuplips/makeuplips_1704848055000_qLcs0nAWBMlZ8fBxyO0TR5Z1.jpg",
-        //     },
-        //     data: {
-        //       new: 'true',
-        //     },
-        //   });
+        await prisma.makeup.updateMany({
+            where: {
+                image: '/images/makeupface/makeupface_1704846010816_cwOjfBkMaEjUy8fmAffpc3aA.jpg'
+            },
+            data: {
+              sale: 25,
+            },
+          });
+
+          await prisma.makeup.updateMany({
+            where: {
+                image: '/images/makeupface/makeupface_1704846691632_Pea4NIzEDu7GpQ50hswLA8bA.png'
+            },
+            data: {
+              sale: 50,
+            },
+          });
+
+          await prisma.makeup.updateMany({
+            where: {
+                image: '/images/makeupeye/makeupeye_1704919498290_u2CNz2u-lLSuZpc2YJyINhNW.jpg'
+            },
+            data: {
+              sale: 50,
+            },
+          });
+
+
+          await prisma.makeup.updateMany({
+            where: {
+                image: '/images/makeupcheek/makeupcheek_1705008448993_phkKhGbbF2jaqZYBJq9Biiga.jpg'
+            },
+            data: {
+              sale: 25,
+            },
+          });
+
         const products = await prisma.makeup.findMany(lang && {
             where: {
                 lang,

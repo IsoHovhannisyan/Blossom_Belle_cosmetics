@@ -10,6 +10,97 @@ const all = async (req, res) => {
     const lang = req.query.lang || '';
 
     try {
+        await prisma.brush.updateMany({
+            where: {
+                lang: 'en'
+            },
+            data: {
+              btn_text: 'Watch',
+            },
+          });
+
+          await prisma.brush.updateMany({
+            where: {
+                lang: 'am'
+            },
+            data: {
+              btn_text: 'Դիտել',
+            },
+          });
+
+          await prisma.brush.updateMany({
+            where: {
+                image: '/images/eyebrushes/eyebrushes_1705368105146_H13vzZLu-lmEI6bzhcm-ewuv.jpg'
+            },
+            data: {
+              new: 'true',
+            },
+          });
+
+          await prisma.brush.updateMany({
+            where: {
+                image: '/images/eyebrushes/eyebrushes_1705368593211_vGakVoS8vJRG1sN-ilrVYW7J.jpg'
+            },
+            data: {
+              best_seller: 'true',
+            },
+          });
+
+          await prisma.brush.updateMany({
+            where: {
+                image: '/images/eyebrushes/eyebrushes_1705368832147_VRQYKs177-r7o3zNpH4iASuR.jpg'
+            },
+            data: {
+              sale: 25,
+            },
+          });
+
+
+          await prisma.brush.updateMany({
+            where: {
+                image: '/images/lipbrushes/lipbrushes_1705369031432_sAIej3Q44YolD8cd1a2ZIpm6.jpg'
+            },
+            data: {
+              new: 'true',
+            },
+          });
+
+          await prisma.brush.updateMany({
+            where: {
+                image: '/images/cheekbrush/cheekbrush_1705369795408_hxIy-eQbp8Sckdt0EXvENLR9.jpg'
+            },
+            data: {
+              new: 'true',
+            },
+          });
+
+          await prisma.brush.updateMany({
+            where: {
+                image: '/images/facebrushes/facebrushes_1705369488559_GdD2UaBWrCzVKlixmEsx15om.jpg'
+            },
+            data: {
+              best_seller: 'true',
+            },
+          });
+
+          await prisma.brush.updateMany({
+            where: {
+                image: '/images/facebrushes/facebrushes_1705369598687_jG8AMthY352TKW4QE-2wy_wG.jpg'
+            },
+            data: {
+              sale: 50,
+            },
+          });
+
+          await prisma.brush.updateMany({
+            where: {
+                image: '/images/cheekbrush/cheekbrush_1705369988042_LWbTx2_ozh259zERmwXSah42.jpg'
+            },
+            data: {
+                best_seller: 'true',
+            },
+          });
+
         const products = await prisma.brush.findMany(lang && {
             where: {
                 lang,
