@@ -46,6 +46,7 @@ model Navbar {
   navbar      String
   categories  String
   delivery    String?
+  sale        String?
   user        User   @relation(fields: [authorId], references: [id])
   authorId    String @db.ObjectId
 }
