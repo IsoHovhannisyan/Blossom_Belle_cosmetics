@@ -181,11 +181,15 @@ model Collectionimages {
 }
 
 model Footer {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  lang     String
-  heading  String
-  links    String
-  info     String
-  user     User   @relation(fields: [authorId], references: [id])
-  authorId String @db.ObjectId
+  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  lang             String
+  links            String
+  about_us         String
+  help_heading     String
+  help             String
+  delivery_heading String
+  delivery         String
+  delivery_region  String?
+  user             User   @relation(fields: [authorId], references: [id])
+  authorId         String @db.ObjectId
 }

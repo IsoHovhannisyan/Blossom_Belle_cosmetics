@@ -34,7 +34,7 @@ const all = async (req, res) => {
 const add = async (req, res) => {
     const data = req.body;
 
-    if (!data.lang || !data.heading || !data.links || !data.info) {
+    if (!data.lang || !data.links) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
