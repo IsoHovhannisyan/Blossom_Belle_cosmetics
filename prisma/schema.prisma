@@ -190,6 +190,7 @@ model Footer {
   delivery_heading String
   delivery         String
   delivery_region  String?
+  phone            String?
   user             User   @relation(fields: [authorId], references: [id])
   authorId         String @db.ObjectId
 }
