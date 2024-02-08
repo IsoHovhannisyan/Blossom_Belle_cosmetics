@@ -168,6 +168,7 @@ model Basketpagelabel {
   confirmation  String?
   continueshop  String?  
   checkout_data String?
+  payment       String?
   user     User   @relation(fields: [authorId], references: [id])
   authorId String @db.ObjectId
 }
