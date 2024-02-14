@@ -90,6 +90,11 @@ const add = async (req, res) => {
 
 const remove = async (req, res) => {
     const id = req.params.id;
+    const fileName = req.body;
+
+    if(!fileName.fileName){
+        return res.status(400).json({ message: "All fields are required" });
+    }
 
     try {
         await prisma.collectionimages.delete({
@@ -98,6 +103,13 @@ const remove = async (req, res) => {
             },
         });
 
+        fs.unlink(`./public/`+fileName.fileName, (err) => {
+            if (err) {
+                console.log("failed to delete local image:"+err);
+            } else {
+                console.log('successfully deleted local image');                                
+            }
+    });
         res.status(200).json("OK");
     } catch {
         res.status(500).json({ message: "Failed to delete" });

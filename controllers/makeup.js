@@ -75,7 +75,7 @@ const remove = async (req, res) => {
 
 /**
  * 
- * @route PUT api/hottour/edit/:id
+ * @route PUT api/makeup/edit/:id
  * @desc Редактирование сотрудника
  * @access Private
  */
