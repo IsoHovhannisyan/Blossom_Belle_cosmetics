@@ -64,6 +64,7 @@ const add = async (req, res) => {
 
         fs.rename(imagePath, imageFullPath, (err) => {
             if (err) {
+                
                 return res.status(500).json({ message: "Failed to move the uploaded file" });
             }
         });
@@ -90,14 +91,14 @@ const add = async (req, res) => {
 
 const remove = async (req, res) => {
     const id = req.params.id;
-    const fileName = req.body;
+    const data = req.body;
 
-    if(!fileName.fileName){
+    if(!data.fileName){
         return res.status(400).json({ message: "All fields are required" });
     }
 
     try {
-        fs.unlink(`./public/`+fileName.fileName, (err) => {
+        fs.unlink(`./public/`+ data.fileName, (err) => {
             if (err) {
                 return res.status(400).json({ message: "Failed to delete local image:" });
             }
@@ -107,9 +108,9 @@ const remove = async (req, res) => {
                 id,
             },
         });
-        res.status(200).json("OK");
-    } catch {
-        res.status(500).json({ message: "Failed to delete" });
+        return res.status(200).json("OK");
+    } catch(err) {
+        return res.status(500).json({ message: "Failed to delete" });
     }
 };
 
