@@ -51,7 +51,7 @@ const add = async (req, res) => {
 
 /**
  * 
- * @route POST api/hottour/remove/:id
+ * @route POST api/makeup/remove/:id
  * @desc Удаление тура
  * @access Private
  */
