@@ -11,6 +11,14 @@ const all = async (req, res) => {
     const lang = req.query.lang || '';
 
     try {
+        await prisma.slider.updateMany({
+            where: {
+                path: 'slider'
+            },
+            data: {
+              category: 'slider'
+            },
+          });
         const slider = await prisma.slider.findMany(lang && {
             where: {
                 lang,
