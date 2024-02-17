@@ -31,6 +31,7 @@ app.use('/api/makeup', require('./routes/makeup'));
 app.use('/api/skincare', require('./routes/skincare'));
 app.use('/api/hair', require('./routes/hair'));
 app.use('/api/brush', require('./routes/brush'));
+app.use('/api/gift', require('./routes/gift'));
 app.use('/api/collection_images', require("./routes/collection_images"));
 app.use('/api/product', require('./routes/product_page_label'));
 app.use('/api/basket', require('./routes/basket_page_label'));

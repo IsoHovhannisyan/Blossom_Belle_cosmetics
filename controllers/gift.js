@@ -1,9 +1,8 @@
 const { prisma } = require("../prisma/prisma-client");
 
-
 /**
- * @route GET api/slider/all
- * @desc Получение всех сотрудников
+ * @route GET api/hottour/all
+ * @desc Получение всех горяъих туров
  * @access Private
  */
 
@@ -11,13 +10,14 @@ const all = async (req, res) => {
     const lang = req.query.lang || '';
 
     try {
-        const slider = await prisma.slider.findMany(lang && {
+        const products = await prisma.gift.findMany(lang && {
             where: {
                 lang,
             },
         });
+        
 
-        res.status(200).json(slider);
+        res.status(200).json(products);
     } catch {
         res.status(400).json({ message: "Failed to receive" });
     }
@@ -26,33 +26,33 @@ const all = async (req, res) => {
 
 /**
  * 
- * @route POST api/slider/add
- * @desc Добавление сотрудника
+ * @route POST api/hottour/add
+ * @desc Добавление тура
  * @access Private
  */
 
 const add = async (req, res) => {
     const data = req.body;
 
-    if (!data.image || !data.lang) {
+    if ( !data.category || !data.lang || !data.title || !data.descr || !data.image || !data.btn_text || !data.price) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
-    const slider = await prisma.slider.create({
+    const product = await prisma.gift.create({
         data: {
             ...data,
             authorId: req.user.id,
         },
     });
 
-    return res.status(201).json(slider);
+    return res.status(201).json(product);
 };
 
 
 /**
  * 
- * @route POST api/slider/remove
- * @desc Удаление сотрудника
+ * @route POST api/makeup/remove/:id
+ * @desc Удаление тура
  * @access Private
  */
 
@@ -60,21 +60,22 @@ const remove = async (req, res) => {
     const id = req.params.id;
 
     try {
-        await prisma.slider.delete({
+        await prisma.gift.delete({
             where: {
                 id,
             },
         });
 
-        return res.status(200).json("OK");
+        res.status(200).json("OK");
     } catch {
         return res.status(500).json({ message: "Failed to delete" });
     }
 };
 
+
 /**
  * 
- * @route PUT api/slider/edit
+ * @route PUT api/makeup/edit/:id
  * @desc Редактирование сотрудника
  * @access Private
  */
@@ -84,7 +85,7 @@ const edit = async (req, res) => {
     const id = req.params.id;
 
     try {
-        await prisma.slider.update({
+        await prisma.gift.update({
             where: {
                 id,
             },
@@ -97,33 +98,35 @@ const edit = async (req, res) => {
     }
 };
 
+
 /**
  * 
- * @route GET api/slider/:id
+ * @route GET api/hottour/:id
  * @desc Полчуние сотрудника
  * @access Private
  */
 
-const slide = async (req, res) => {
+const gift = async (req, res) => {
     const id = req.params.id;
 
     try {
-        const slider = await prisma.slider.findUnique({
+        const product = await prisma.gift.findUnique({
             where: {
                 id,
             },
         });
 
-        res.status(200).json(slider);
+        res.status(200).json(product);
     } catch {
         res.status(400).json({ message: "Failed to receive" });
     }
 };
+
 
 module.exports = {
     all,
     add,
     remove,
     edit,
-    slide,
+    gift,
 };

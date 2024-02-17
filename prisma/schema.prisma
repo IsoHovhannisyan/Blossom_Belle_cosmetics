@@ -23,6 +23,7 @@ model User {
   createdSkincare            Skincare[]
   createdHair                Hair[]
   createdBrush               Brush[]
+  createdGift                Gift[]
   createdProductpagelabel    Productpagelabel[]
   createdBasketpagelabel     Basketpagelabel[]
   createdCollectionimages    Collectionimages[]
@@ -125,6 +126,24 @@ model Hair {
 }
 
 model Brush {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  category    String
+  lang        String
+  title       String
+  descr       String
+  image       String
+  btn_text    String
+  price       String
+  quantity    Int?
+  path        String?
+  new         String?
+  best_seller String?
+  sale        Int?
+  user        User   @relation(fields: [authorId], references: [id])
+  authorId    String @db.ObjectId
+}
+
+model Gift {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   category    String
   lang        String
