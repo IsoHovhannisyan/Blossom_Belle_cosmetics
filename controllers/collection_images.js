@@ -52,7 +52,7 @@ const add = async (req, res) => {
         const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
 
         if (!fs.existsSync(nameFolder)) {
-            fs.mkdirSync(nameFolder, { recursive: true });
+            await fs.mkdir(nameFolder, { recursive: true });
         }
 
         const imagePath = image.path;
