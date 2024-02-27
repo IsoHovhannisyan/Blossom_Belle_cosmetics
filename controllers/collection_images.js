@@ -39,7 +39,7 @@ const add = async (req, res) => {
 
     let form = new multiparty.Form();
 
-    form.parse(req, async (err, fields, files) => {
+    form.parse(req, async function (err, fields, files) {
         if (err) return res.status(400).json({ message: "Failed to parse form data" });
 
         const folder = fields.folder && fields.folder[0].toLowerCase();
@@ -51,38 +51,32 @@ const add = async (req, res) => {
 
         const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
 
-        // Check if the directory exists; if not, create it
-        await fs.mkdir(nameFolder, { recursive: true }).catch(error => {
-            return res.status(500).json({ message: "Failed to create directory" });
-        });
+        if (!fs.existsSync(nameFolder)) {
+            fs.mkdirSync(nameFolder, { recursive: true });
+        }
 
         const imagePath = image.path;
-        const imageFileName = imagePath.slice(imagePath.lastIndexOf(path.sep) + 1);
+        const imageFileName = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
         const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
-        // Rename the file
+
         try {
             await fs.rename(imagePath, imageFullPath);
         } catch (error) {
-            return res.status(500).json({ message: "Failed to rename file", error: error.message });
+            return res.status(500).json({ message: "Failed to rename file", error: error });
         }
 
-        // Insert into database
-        try {
-            const collectionImages = await prisma.collectionimages.create({
-                data: {
-                    folder,
-                    image_name: imageURL,
-                    authorId: req.user.id,
-                },
-            });
+        const collectionimages = await prisma.collectionimages.create({
+            data: {
+                folder,
+                image_name: imageURL,
+                authorId: req.user.id,
+            },
+        });
 
-            return res.status(201).json(collectionImages);
-        } catch (error) {
-            return res.status(500).json({ message: "Database operation failed", error: error.message });
-        }
+        return res.status(201).json(collectionimages );
     });
 };
 
