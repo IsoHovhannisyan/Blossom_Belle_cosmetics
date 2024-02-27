@@ -52,7 +52,7 @@ const add = async (req, res) => {
         const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
 
         if (!fs.existsSync(nameFolder)) {
-            await fs.mkdir(nameFolder, { recursive: true });
+            fs.mkdirSync(nameFolder, { recursive: true });
         }
 
         const imagePath = image.path;
@@ -62,11 +62,12 @@ const add = async (req, res) => {
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
 
-        try {
-            await fs.rename(imagePath, imageFullPath);
-        } catch (error) {
-            return res.status(500).json({ message: "Failed to rename file", error: error });
-        }
+        fs.rename(imagePath, imageFullPath, (err) => {
+            if (err) {
+                
+                return res.status(500).json({ message: err });
+            }
+        });
 
         const collectionimages = await prisma.collectionimages.create({
             data: {
