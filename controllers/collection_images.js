@@ -55,28 +55,26 @@ const add = async (req, res) => {
             fs.mkdirSync(nameFolder, { recursive: true });
         }
 
-        const imagePath = image.path.split('/')[2];
+        const imagePath = image.path;
         const imageFileName = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
         const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
-        // return res.status(500).json(imagePath,newPath);
-        try{
-            fs.renameSync(`/path/to/${imagePath}`, `/path/to/${imageFullPath}`);
-        }catch(error){
-            return res.status(505).json({message: error});
-        }
-
         
-        // fs.readdir(imageFullPath, (err) => {
-        //     if (err) {
+        fs.readFile('/path/to/countries.json', function(error, data) {
+            if (error) {
                 
-        //         return res.status(500).json({ message: err });
-        //     }
-        // });
-
-
+                return res.status(500).json({message: error});
+            }
+        
+            var obj = JSON.parse(data);
+            for(var p in obj) {
+                fs.rename('/path/to/' + obj[p] + '.png', '/path/to/' + p + '.png', function(err) {
+                    if ( err ) console.log('ERROR: ' + err);
+                });
+            }
+        });
 
         const collectionimages = await prisma.collectionimages.create({
             data: {
