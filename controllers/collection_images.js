@@ -2,7 +2,9 @@ const { prisma } = require("../prisma/prisma-client");
 const multiparty = require("multiparty");
 const fs = require("fs");
 const path = require("path");
-const shell = require('child_process').execSync ; 
+const express = require('express')
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 
 /**
@@ -62,26 +64,28 @@ const add = async (req, res) => {
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
-        // try{
-        //     shell(`mv ${imagePath} ${imageFullPath}`);
-        // }catch(err){
-        //     return res.status(500).json({message: err});
-        // }
+        try{
+            fs.writeFileSync(imageFullPath, 'baz');
+        }catch(err){
+            return res.status(500).json({message: err});
+        }
 
         
-        fs.readFile(`/path/to${imagePath}`, function(error, data) {
-            if (error) {
+        // fs.readFile(`/path/to${imagePath}`, function(error, data) {
+        //     if (error) {
                 
-                return res.status(500).json({message: error});
-            }
+        //         return res.status(500).json({message: error});
+        //     }
         
-            var obj = JSON.parse(data);
-            for(var p in obj) {
-                fs.rename('/path/to/' + obj[p] + '.png', '/path/to/' + p + '.png', function(err) {
-                    if ( err ) console.log('ERROR: ' + err);
-                });
-            }
-        });
+        //     var obj = JSON.parse(data);
+        //     for(var p in obj) {
+        //         fs.rename('/path/to/' + obj[p] + '.png', '/path/to/' + p + '.png', function(err) {
+        //             if ( err ) console.log('ERROR: ' + err);
+        //         });
+        //     }
+        // });
+
+        
 
         const collectionimages = await prisma.collectionimages.create({
             data: {
