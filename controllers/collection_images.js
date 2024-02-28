@@ -55,7 +55,7 @@ const add = async (req, res) => {
             fs.mkdirSync(nameFolder, { recursive: true });
         }
 
-        const imagePath = image.path;
+        const imagePath = image.path.split('/')[2];
         const imageFileName = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
         const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
