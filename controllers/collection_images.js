@@ -62,10 +62,9 @@ const add = async (req, res) => {
         const imageFullPath = path.join(`/path/to/${nameFolder}`, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
-        shell(`mv ${imagePath} ${imageFullPath}`);
-
-
         return res.status(500).json({ image, imageFileName });
+
+        shell(`mv ${imagePath} ${imageFullPath}`);
         
         // fs.readdir(imageFullPath, (err) => {
         //     if (err) {
