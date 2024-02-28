@@ -1,9 +1,8 @@
 const { prisma } = require("../prisma/prisma-client");
 const multiparty = require("multiparty");
 const fs = require("fs");
-const util =  require("util");
 const path = require("path");
-const WebSocket = require('ws');
+const shell = require('child_process').execSync ;
 
 
 /**
@@ -57,23 +56,23 @@ const add = async (req, res) => {
             fs.mkdirSync(nameFolder, { recursive: true });
         }
 
-        const imagePath = image.path;
-        const imageFileName = imagePath.slice(imagePath.lastIndexOf("/") + 1);
+        const imagePath = `/path/to/${image.path}`;
+        const imageFileName = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
         const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
-        const imageFullPath = path.join(nameFolder, updatedImageFileName);
-        const imageURL = path.join("/images", folder, updatedImageFileName);
+        const imageFullPath = path.join(`/path/to/${nameFolder}`, updatedImageFileName);
+        const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
+        shell(`mv ${imagePath} ${imageFullPath}`);
 
-        
-        WebSocket.on('message', function (message) {
-            var fs = require('fs');
-            fs.writeFile("/tmp/test", message, function (err) {
-                if (err) {
-                    return res.status(505).json(err);
-                }
-                return res.status(201).json("The file was saved!");
-            });
+        // return res.status(500).json({ image, imageFileName });
+        fs.readdir(imageFullPath, (err) => {
+            if (err) {
+                
+                return res.status(500).json({ message: err });
+            }
         });
+
+
 
         const collectionimages = await prisma.collectionimages.create({
             data: {
