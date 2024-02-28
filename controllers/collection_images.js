@@ -56,10 +56,10 @@ const add = async (req, res) => {
         }
 
         const imagePath = image.path;
-        const imageFileName = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
+        const imageFileName = imagePath.slice(imagePath.lastIndexOf("/") + 1);
         const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
-        const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
+        const imageURL = path.join("/images", folder, updatedImageFileName);
 
         return res.status(500).json({ image, imageFileName });
         fs.rename(imagePath, imageFullPath, (err) => {
