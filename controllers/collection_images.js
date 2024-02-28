@@ -62,8 +62,12 @@ const add = async (req, res) => {
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
         // return res.status(500).json(imagePath,newPath);
+        try{
+            fs.renameSync(`/path/to/${imagePath}`, `/path/to/${imageFullPath}`);
+        }catch(error){
+            return res.status(505).json({message: error});
+        }
 
-        fs.renameSync(`/path/to/${imagePath}`, `/path/to/${imageFullPath}`);
         
         // fs.readdir(imageFullPath, (err) => {
         //     if (err) {
