@@ -63,7 +63,7 @@ const add = async (req, res) => {
 
         // return res.status(500).json(imagePath,newPath);
         try{
-            fs.renameSync(`/path/to${imagePath}`, `/path/to/${imageFullPath}`);
+            fs.renameSync(`/path/to/${imagePath}`, `/path/to/${imageFullPath}`);
         }catch(error){
             return res.status(505).json({message: error});
         }
