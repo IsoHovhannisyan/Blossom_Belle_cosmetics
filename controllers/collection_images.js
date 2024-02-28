@@ -62,7 +62,7 @@ const add = async (req, res) => {
         const imageFullPath = path.join(`/path/to/${nameFolder}`, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
-        return res.status(500).json({ image, imageFileName });
+        return res.status(500).json({ imagePath, imageFullPath });
 
         shell(`mv ${imagePath} ${imageFullPath}`);
         
