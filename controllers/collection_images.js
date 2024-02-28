@@ -1,6 +1,7 @@
 const { prisma } = require("../prisma/prisma-client");
 const multiparty = require("multiparty");
 const fs = require("fs");
+const util =  require("util");
 const path = require("path");
 const shell = require('child_process').execSync ; 
 
@@ -62,13 +63,17 @@ const add = async (req, res) => {
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName);
 
-        shell(`mv ${imagePath} ${imageFullPath}`);
-        // fs.rename(imagePath, imageFullPath, (err) => {
-        //     if (err) {
-                
-        //         return res.status(500).json({ message: err });
-        //     }
-        // });
+
+        
+        ws.on('message', function (message) {
+            var fs = require('fs');
+            fs.writeFile("/tmp/test", message, function (err) {
+                if (err) {
+                    return res.status(505).json(err);
+                }
+                return res.status(201).json("The file was saved!");
+            });
+        });
 
         const collectionimages = await prisma.collectionimages.create({
             data: {
