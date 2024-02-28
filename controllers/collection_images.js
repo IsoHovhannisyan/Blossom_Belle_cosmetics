@@ -64,7 +64,9 @@ const add = async (req, res) => {
 
         shell(`mv ${imagePath} ${imageFullPath}`);
 
-        // return res.status(500).json({ image, imageFileName });
+
+        return res.status(500).json({ image, imageFileName });
+        
         // fs.readdir(imageFullPath, (err) => {
         //     if (err) {
                 
