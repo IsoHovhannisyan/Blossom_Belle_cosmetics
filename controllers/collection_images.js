@@ -60,9 +60,10 @@ const add = async (req, res) => {
         const imageFileName = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
         const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
+        const newPath = `/path/to/${imageFullPath}`
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
-        return res.status(500).json(`/path/to/${imagePath}`,`/path/to/${imageFullPath}`);
+        return res.status(500).json(newPath);
 
         shell(`mv /path/to${imagePath} /path/to${imageFullPath}`);
         
