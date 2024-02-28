@@ -3,7 +3,7 @@ const multiparty = require("multiparty");
 const fs = require("fs");
 const util =  require("util");
 const path = require("path");
-const shell = require('child_process').execSync ; 
+const WebSocket = require('ws');
 
 
 /**
@@ -65,7 +65,7 @@ const add = async (req, res) => {
 
 
         
-        ws.on('message', function (message) {
+        WebSocket.on('message', function (message) {
             var fs = require('fs');
             fs.writeFile("/tmp/test", message, function (err) {
                 if (err) {
