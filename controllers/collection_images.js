@@ -2,9 +2,7 @@ const { prisma } = require("../prisma/prisma-client");
 const multiparty = require("multiparty");
 const fs = require("fs");
 const path = require("path");
-const express = require('express')
-const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
+var crypto = require('crypto');
 
 
 /**
@@ -65,7 +63,8 @@ const add = async (req, res) => {
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
         try{
-            fs.writeFileSync(imageFullPath, 'baz');
+            var filename = 'foo'+crypto.randomBytes(4).readUInt32LE(0)+'bar';
+            fs.writeFileSync(filename, 'baz');
         }catch(err){
             return res.status(500).json({message: err});
         }
