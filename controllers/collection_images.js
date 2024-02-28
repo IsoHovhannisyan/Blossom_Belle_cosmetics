@@ -56,16 +56,17 @@ const add = async (req, res) => {
             fs.mkdirSync(nameFolder, { recursive: true });
         }
 
-        const imagePath = image.path;
+        const imagePath = `/path/to${image.path}`;
         const imageFileName = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
         const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const newPath = `/path/to/${imageFullPath}`
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
-        return res.status(500).json(newPath);
+        // 
+        
 
-        shell(`mv /path/to${imagePath} /path/to${imageFullPath}`);
+        shell(`mv ${imagePath} ${newPath}`);
         
         // fs.readdir(imageFullPath, (err) => {
         //     if (err) {
