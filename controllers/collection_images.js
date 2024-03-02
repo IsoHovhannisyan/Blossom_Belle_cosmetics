@@ -50,7 +50,6 @@ const add = async (req, res) => {
         }
 
         const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
-        return res.status(400).json({ message: __dirname  });
 
         if (!fs.existsSync(nameFolder)) {
             fs.mkdirSync(nameFolder, { recursive: true });
@@ -62,6 +61,7 @@ const add = async (req, res) => {
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
+        return res.status(400).json({ message: __dirname, imagePath, imageFullPath  });
         
         fs.rename(imagePath, imageFullPath, (err) => {
             if (err) {
