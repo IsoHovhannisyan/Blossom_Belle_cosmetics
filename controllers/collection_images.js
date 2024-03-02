@@ -71,12 +71,13 @@ const add = async (req, res) => {
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
         // return res.status(500).json({ message: imageURL, imagePath, imageFullPath,a:imagePath.lastIndexOf("\\") ,imageFileName1});
 
-        fs.rename(imagePath, imageFullPath, (err) => {
-            if (err) {
-                return res.status(500).json({ message: err, imagePath, imageFullPath });
-            }
-        });
+    
         setTimeout(async () => {
+            fs.rename(imagePath, imageFullPath, (err) => {
+                if (err) {
+                    return res.status(500).json({ message: err, imagePath, imageFullPath });
+                }
+            });
             fs.copyFile(imagePath, imageFullPath, (err) => {
                 if (err) {
                     return res.status(500).json({ message: "Failed to move the uploaded file", err });
