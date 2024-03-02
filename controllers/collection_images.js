@@ -50,11 +50,15 @@ const add = async (req, res) => {
         }
 
         const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
-
-        if (!fs.existsSync(nameFolder)) {
-            fs.mkdirSync(nameFolder, { recursive: true });
-        }
+        try {
+            if (!fs.existsSync(nameFolder)) {
+                fs.mkdirSync(nameFolder, { recursive: true });
+            }
+        } catch (e) {
         return res.status(400).json({ message: nameFolder });
+            
+        }
+       
 
         const imagePath = image.path;
         const imageFileName = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
