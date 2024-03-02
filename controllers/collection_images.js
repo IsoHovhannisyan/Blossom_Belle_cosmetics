@@ -70,7 +70,7 @@ const add = async (req, res) => {
                 return res.status(500).json({ message: err, imagePath, imageFullPath });
             }
         });
-        return res.status(500).json({ message: err, imagePath, imageFullPath, imageFileName1, imageFileName, updatedImageFileName })
+        return res.status(500).json({ imagePath, imageFullPath, imageFileName1, imageFileName, updatedImageFileName })
 
         const collectionimages = await prisma.collectionimages.create({
             data: {
