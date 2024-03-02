@@ -70,8 +70,7 @@ const add = async (req, res) => {
                 return res.status(500).json({ message: err, imagePath, imageFullPath });
             }
         });
-        let a = fs.existsSync('/var/task/public/images/slider/aaaa.jpg');
-        return res.status(500).json({ message: err, imagePath, imageFullPath, imageFileName1, imageFileName, updatedImageFileName, a })
+        return res.status(500).json({ message: err, imagePath, imageFullPath, imageFileName1, imageFileName, updatedImageFileName })
 
         const collectionimages = await prisma.collectionimages.create({
             data: {
