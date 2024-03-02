@@ -70,7 +70,7 @@ const add = async (req, res) => {
 
         fs.rename(imagePath, imageFullPath, (err) => {
             if (err) {
-                return res.status(500).json({ message: "Failed to move the uploaded file" });
+                return res.status(500).json({ message: err, a,b,c });
             }
         });
 
