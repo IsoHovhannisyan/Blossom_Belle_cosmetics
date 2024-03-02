@@ -35,7 +35,7 @@ const all = async (req, res) => {
  */
 
 const add = async (req, res) => {
-    const IMAGE_UPLOAD_DIR = __dirname + "/public/images/";
+    const IMAGE_UPLOAD_DIR = "./public/images/";
 
     let form = new multiparty.Form();
 
@@ -46,11 +46,10 @@ const add = async (req, res) => {
         const image = files.image && files.image[0];
 
         if (!folder || !image) {
-            return res.status(400).json({ message: __dirname  });
+            return res.status(400).json({ message: "All fields are required" });
         }
 
         const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
-        return res.status(400).json({ message: __dirname, imagePath, imageFullPath , a: 2, nameFolder });
 
         if (!fs.existsSync(nameFolder)) {
             fs.mkdirSync(nameFolder, { recursive: true });
@@ -62,11 +61,11 @@ const add = async (req, res) => {
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
-        
+
         fs.rename(imagePath, imageFullPath, (err) => {
             if (err) {
                 
-                return res.status(500).json({ message: err });
+                return res.status(500).json({ message: "Failed to move the uploaded file" });
             }
         });
 
