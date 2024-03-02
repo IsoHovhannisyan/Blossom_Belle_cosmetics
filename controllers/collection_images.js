@@ -76,11 +76,7 @@ const add = async (req, res) => {
             }
         });
 
-        fs.copyFile(imagePath, imageFullPath, (err) => {
-            if (err) {
-                return res.status(500).json({ message: "Failed to move the uploaded file", err });
-            }
-        })        
+          
         const collectionimages = await prisma.collectionimages.create({
             data: {
                 folder,
