@@ -55,7 +55,7 @@ const add = async (req, res) => {
                 fs.mkdirSync(nameFolder, { recursive: true });
             }
         } catch (e) {
-        return res.status(400).json({ message: nameFolder });
+        return res.status(400).json({ message: e });
             
         }
        
