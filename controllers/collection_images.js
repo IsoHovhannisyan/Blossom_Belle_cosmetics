@@ -50,12 +50,16 @@ const add = async (req, res) => {
         }
 
         const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
+        let a = fs.existsSync('/var/task/controllers/public/images/slider');
+        let b = fs.existsSync('/var/task/controllers/public/images');
+        let c = fs.existsSync('/var/task/controllers/public/');
+
         try {
             if (!fs.existsSync(nameFolder)) {
                 fs.mkdirSync(nameFolder, { recursive: true });
             }
         } catch (e) {
-            return res.status(400).json({ message: e });
+            return res.status(400).json({ message: e, a,b,c });
         }
 
         const imagePath = image.path;
