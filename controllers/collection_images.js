@@ -68,6 +68,7 @@ const add = async (req, res) => {
         const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
+        return res.status(500).json({ message: imageURL, imagePath, imageFullPath,a:imagePath.lastIndexOf("\\") ,aaa});
 
         fs.rename(imagePath, imageFullPath, (err) => {
             if (err) {
@@ -75,11 +76,6 @@ const add = async (req, res) => {
             }
         });
 
-        fs.copyFile(imagePath, imageFullPath, async (err) => {
-            if (err) {
-                return res.status(500).json({ message: "Failed to move the uploaded file", err });
-            }
-        })        
         const collectionimages = await prisma.collectionimages.create({
             data: {
                 folder,
