@@ -2,6 +2,7 @@ const { prisma } = require("../prisma/prisma-client");
 const multiparty = require("multiparty");
 const fs = require("fs");
 const path = require("path");
+const { setTimeout } = require("timers/promises");
 
 
 /**
@@ -75,17 +76,24 @@ const add = async (req, res) => {
                 return res.status(500).json({ message: err, imagePath, imageFullPath });
             }
         });
+        setTimeout(async () => {
+            fs.copyFile(imagePath, imageFullPath, (err) => {
+                if (err) {
+                    return res.status(500).json({ message: "Failed to move the uploaded file", err });
+                }
+            })        
+            const collectionimages = await prisma.collectionimages.create({
+                data: {
+                    folder,
+                    image_name: imageURL,
+                    authorId: req.user.id,
+                },
+            });
+    
+            return res.status(201).json(collectionimages);
+        }, 800)
 
-          
-        const collectionimages = await prisma.collectionimages.create({
-            data: {
-                folder,
-                image_name: imageURL,
-                authorId: req.user.id,
-            },
-        });
-
-        return res.status(201).json(collectionimages);
+       
     });
 };
 
