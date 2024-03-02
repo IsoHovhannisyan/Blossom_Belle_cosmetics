@@ -36,7 +36,6 @@ const all = async (req, res) => {
 
 const add = async (req, res) => {
     const IMAGE_UPLOAD_DIR = __dirname + "/public/images/";
-    return res.status(400).json({ message: __dirname  });
 
     let form = new multiparty.Form();
 
@@ -51,6 +50,7 @@ const add = async (req, res) => {
         }
 
         const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
+        return res.status(400).json({ message: __dirname  });
 
         if (!fs.existsSync(nameFolder)) {
             fs.mkdirSync(nameFolder, { recursive: true });
