@@ -35,7 +35,7 @@ const all = async (req, res) => {
  */
 
 const add = async (req, res) => {
-    const IMAGE_UPLOAD_DIR =  `${__dirname}/public/images/`;
+    const IMAGE_UPLOAD_DIR = `${__dirname}/public/images/`;
 
     let form = new multiparty.Form();
 
@@ -55,10 +55,8 @@ const add = async (req, res) => {
                 fs.mkdirSync(nameFolder, { recursive: true });
             }
         } catch (e) {
-        return res.status(400).json({ message: e });
-            
+            return res.status(400).json({ message: e });
         }
-       
 
         const imagePath = image.path;
         const imageFileName = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
@@ -66,10 +64,8 @@ const add = async (req, res) => {
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
-
         fs.rename(imagePath, imageFullPath, (err) => {
             if (err) {
-                
                 return res.status(500).json({ message: "Failed to move the uploaded file" });
             }
         });
@@ -82,7 +78,7 @@ const add = async (req, res) => {
             },
         });
 
-        return res.status(201).json(collectionimages );
+        return res.status(201).json(collectionimages);
     });
 };
 
