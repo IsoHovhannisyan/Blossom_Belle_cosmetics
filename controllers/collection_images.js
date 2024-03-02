@@ -35,7 +35,8 @@ const all = async (req, res) => {
  */
 
 const add = async (req, res) => {
-    const IMAGE_UPLOAD_DIR = __dirname + "/public/images/";
+    const IMAGE_UPLOAD_DIR =  `${__dirname}/public/images/`;
+    return res.status(400).json({ message: IMAGE_UPLOAD_DIR });
 
     let form = new multiparty.Form();
 
