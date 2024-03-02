@@ -2,7 +2,6 @@ const { prisma } = require("../prisma/prisma-client");
 const multiparty = require("multiparty");
 const fs = require("fs");
 const path = require("path");
-var crypto = require('crypto');
 
 
 /**
@@ -36,7 +35,9 @@ const all = async (req, res) => {
  */
 
 const add = async (req, res) => {
-    const IMAGE_UPLOAD_DIR = "./public/images/";
+    const IMAGE_UPLOAD_DIR = __dirname+"/public/images/";
+    // const IMAGE_UPLOAD_DIR = "./public/images/";
+
 
     let form = new multiparty.Form();
 
@@ -47,7 +48,7 @@ const add = async (req, res) => {
         const image = files.image && files.image[0];
 
         if (!folder || !image) {
-            return res.status(400).json({ message: "All fields are required" });
+            return res.status(400).json({ message: __dirname  });
         }
 
         const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
@@ -62,29 +63,13 @@ const add = async (req, res) => {
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
-        try{
-            var filename = 'foo'+crypto.randomBytes(4).readUInt32LE(0)+'bar';
-            fs.writeFileSync(filename, 'baz');
-        }catch(err){
-            return res.status(500).json({message: err});
-        }
-
         
-        // fs.readFile(`/path/to${imagePath}`, function(error, data) {
-        //     if (error) {
+        fs.rename(imagePath, imageFullPath, (err) => {
+            if (err) {
                 
-        //         return res.status(500).json({message: error});
-        //     }
-        
-        //     var obj = JSON.parse(data);
-        //     for(var p in obj) {
-        //         fs.rename('/path/to/' + obj[p] + '.png', '/path/to/' + p + '.png', function(err) {
-        //             if ( err ) console.log('ERROR: ' + err);
-        //         });
-        //     }
-        // });
-
-        
+                return res.status(500).json({ message: imagePath });
+            }
+        });
 
         const collectionimages = await prisma.collectionimages.create({
             data: {
