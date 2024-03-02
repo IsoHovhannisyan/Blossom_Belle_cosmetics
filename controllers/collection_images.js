@@ -50,16 +50,13 @@ const add = async (req, res) => {
         }
 
         const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
-        let a = fs.existsSync('/var/task/controllers/public/images/slider');
-        let b = fs.existsSync('/var/task/controllers/public/images');
-        let c = fs.existsSync('/var/task/controllers/public/');
 
         try {
             if (!fs.existsSync(nameFolder)) {
                 fs.mkdirSync(nameFolder, { recursive: true });
             }
         } catch (e) {
-            return res.status(400).json({ message: e, a,b,c });
+            return res.status(400).json({ message: e });
         }
 
         const imagePath = image.path;
@@ -68,12 +65,13 @@ const add = async (req, res) => {
         const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
-        return res.status(500).json({ message: err, imagePath, imageFullPath, imageFileName1, imageFileName, updatedImageFileName })
-        fs.rename(imagePath, imageFullPath, (err) => {
+        fs.rename(imagePath, '/var/task/public/images/slider/aaaa.jpg', (err) => {
             if (err) {
                 return res.status(500).json({ message: err, imagePath, imageFullPath });
             }
         });
+        let a = fs.existsSync('/var/task/public/images/slider/aaaa.jpg');
+        return res.status(500).json({ message: err, imagePath, imageFullPath, imageFileName1, imageFileName, updatedImageFileName, a })
 
         const collectionimages = await prisma.collectionimages.create({
             data: {
