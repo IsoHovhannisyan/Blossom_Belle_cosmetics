@@ -36,7 +36,7 @@ const all = async (req, res) => {
 
 const add = async (req, res) => {
     const IMAGE_UPLOAD_DIR = __dirname+"/public/images/";
-    // const IMAGE_UPLOAD_DIR = "./public/images/";
+    return res.status(500).json({ message: imagePath });
 
 
     let form = new multiparty.Form();
@@ -63,7 +63,6 @@ const add = async (req, res) => {
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
-        return res.status(500).json({ message: imagePath });
 
         fs.rename(imagePath, imageFullPath, (err) => {
             if (err) {
