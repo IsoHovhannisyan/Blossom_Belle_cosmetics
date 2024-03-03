@@ -70,7 +70,7 @@ const add = async (req, res) => {
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
         let a = fs.existsSync(imagePath);
-        return res.status(500).json({ message: imageURL, imagePath, imageFullPath,a:imagePath.lastIndexOf("\\") ,imageFileName1, a});
+        // return res.status(500).json({ message: imageURL, imagePath, imageFullPath,a:imagePath.lastIndexOf("\\") ,imageFileName1, a});
 
     
             fs.rename(imagePath, `${__dirname}/aaa.jpg`, (err) => {
