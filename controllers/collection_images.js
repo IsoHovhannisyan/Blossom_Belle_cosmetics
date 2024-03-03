@@ -51,7 +51,7 @@ const add = async (req, res) => {
         }
 
         const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
-        let a = fs.existsSync('/var/task/controllers/public/images/slider');
+        
         let b = fs.existsSync('/var/task/controllers/public/images');
         let c = fs.existsSync('/var/task/controllers/public/');
 
@@ -69,10 +69,11 @@ const add = async (req, res) => {
         const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
-        return res.status(500).json({ message: imageURL, imagePath, imageFullPath,a:imagePath.lastIndexOf("\\") ,imageFileName1});
+        let a = fs.existsSync(imagePath);
+        return res.status(500).json({ message: imageURL, imagePath, imageFullPath,a:imagePath.lastIndexOf("\\") ,imageFileName1, a});
 
     
-            fs.rename(imagePath, imageFullPath, (err) => {
+            fs.rename(imagePath, `${__dirname}/aaa.jpg`, (err) => {
                 if (err) {
                     return res.status(500).json({ message: err, imagePath, imageFullPath });
                 }
