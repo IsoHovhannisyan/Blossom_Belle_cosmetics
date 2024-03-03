@@ -69,25 +69,14 @@ const add = async (req, res) => {
         const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
-        // return res.status(500).json({ message: imageURL, imagePath, imageFullPath,a:imagePath.lastIndexOf("\\") ,imageFileName1});
+        return res.status(500).json({ message: imageURL, imagePath, imageFullPath,a:imagePath.lastIndexOf("\\") ,imageFileName1});
 
     
-        setTimeout(async () => {
             fs.rename(imagePath, imageFullPath, (err) => {
                 if (err) {
                     return res.status(500).json({ message: err, imagePath, imageFullPath });
                 }
             });
-            try {
-                fs.copyFile(imagePath, imageFullPath, (err) => {
-                    if (err) {
-                        return res.status(500).json({ message: "Failed to move the uploaded file", err });
-                    }
-                })  
-            } catch (w) {
-                return res.status(500).json({ message: w });
-
-            }
            
             const collectionimages = await prisma.collectionimages.create({
                 data: {
@@ -98,7 +87,6 @@ const add = async (req, res) => {
             });
     
             return res.status(201).json(collectionimages);
-        }, 800)
 
        
     });
@@ -121,16 +109,16 @@ const remove = async (req, res) => {
     }
 
     try {
-        fs.unlink(`./public/`+ data.fileName, (err) => {
-            if (err) {
-                return res.status(400).json({ message: "Failed to delete local image:" });
-            }
-        });
         await prisma.collectionimages.delete({
             where: {
                 id,
             },
         });
+        // fs.unlink(`./public/`+ data.fileName, (err) => {
+        //     if (err) {
+        //         return res.status(400).json({ message: "Failed to delete local image:" });
+        //     }
+        // });
         return res.status(200).json("OK");
     } catch(err) {
         return res.status(500).json({ message: "Failed to delete" });
