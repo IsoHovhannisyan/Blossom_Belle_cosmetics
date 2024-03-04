@@ -37,7 +37,7 @@ const all = async (req, res) => {
  */
 
 const add = async (req, res) => {
-    const IMAGE_UPLOAD_DIR = `${__dirname}/../public/images/`;
+    const IMAGE_UPLOAD_DIR = `${__dirname}/./public/images/`;
 
     const folder = req.body.folder;
     const { image } = req.files;
@@ -71,8 +71,11 @@ const add = async (req, res) => {
     // If does not have image mime type prevent from uploading
 
     // Move the uploaded image to our upload folder
-    return res.status(400).json({ message: imagePath,updatedImageFileName, image,  });
-    image.mv(`${nameFolder}` + '/' + updatedImageFileName + '.jpg');
+    try{
+        image.mv(`${nameFolder}` + '/' + updatedImageFileName + '.jpg');
+    }catch(err){
+        return res.status(400).json({ message:err, imagePath,updatedImageFileName, image, nameFolder, updatedImageFileName, aaaa: `${nameFolder}` + '/' + updatedImageFileName + '.jpg' });
+    }
 
     // All good
     res.status(200).json({message: imageURL + '.jpg' });
