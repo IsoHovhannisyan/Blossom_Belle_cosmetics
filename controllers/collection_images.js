@@ -71,7 +71,7 @@ const add = async (req, res) => {
     // If does not have image mime type prevent from uploading
 
     // Move the uploaded image to our upload folder
-    return res.status(400).json({ message: imagePath,updatedImageFileName, });
+    return res.status(400).json({ message: imagePath,updatedImageFileName, image,  });
     image.mv(`${nameFolder}` + '/' + updatedImageFileName + '.jpg');
 
     // All good
