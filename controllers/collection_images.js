@@ -37,7 +37,7 @@ const all = async (req, res) => {
  */
 
 const add = async (req, res) => {
-    const IMAGE_UPLOAD_DIR = `${__dirname}/./public/images/`;
+    const IMAGE_UPLOAD_DIR = `${__dirname}/../public/images/`;
 
     const folder = req.body.folder;
     const { image } = req.files;
