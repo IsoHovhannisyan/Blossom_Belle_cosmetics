@@ -4,6 +4,8 @@ const fs = require("fs");
 const Nfs = require('node:fs');
 const path = require("path");
 const { setTimeout } = require("timers/promises");
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
 
 
 /**
@@ -37,8 +39,6 @@ const all = async (req, res) => {
  */
 
 const add = async (req, res) => {
-    const IMAGE_UPLOAD_DIR = `${__dirname}/../public/images/`;
-
     const folder = req.body.folder;
     const { image } = req.files;
 
@@ -50,28 +50,19 @@ const add = async (req, res) => {
         return res.status(400).json({ message: 'Invalid image format' });
     }
 
-    const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
+    const params = {
+        Bucket: 'your-s3-bucket-name',
+        Key: `${folder}/${Date.now()}_${image.name}`,
+        Body: image.data
+    };
 
     try {
-        if (!fs.existsSync(nameFolder)) {
-            fs.mkdirSync(nameFolder, { recursive: true });
-        }
-    } catch (e) {
-        console.error("Error creating directory:", e);
-        return res.status(500).json({ message: 'Internal server error' });
-    }
-
-    const imageFileName = image.name; // Use the original file name
-    const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
-    const imageFullPath = path.join(nameFolder, updatedImageFileName);
-
-    try {
-        await image.mv(imageFullPath);
-        const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
+        await s3.upload(params).promise();
+        const imageURL = `https://your-s3-bucket-name.s3.amazonaws.com/${folder}/${params.Key}`;
         res.status(200).json({ message: imageURL });
     } catch (err) {
-        console.error("Error saving image:", err);
-        return res.status(500).json({ message: err });
+        console.error("Error uploading image to S3:", err);
+        return res.status(500).json({ message: 'Error uploading image' });
     }
 };
 
