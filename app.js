@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const debug = require('debug');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 
 require('dotenv').config();
 
@@ -21,6 +22,14 @@ app.use(cors({
   ],
   credentials: true
 }));
+app.use(
+    fileUpload({
+        limits: {
+            fileSize: 10000000,
+        },
+        abortOnLimit: true,
+    })
+);
 
 app.use('/', require('./routes/index'));
 app.use('/api/user', require('./routes/users'));

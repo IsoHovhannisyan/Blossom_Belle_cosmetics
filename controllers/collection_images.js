@@ -1,6 +1,7 @@
 const { prisma } = require("../prisma/prisma-client");
 const multiparty = require("multiparty");
 const fs = require("fs");
+const Nfs = require('node:fs');
 const path = require("path");
 const { setTimeout } = require("timers/promises");
 
@@ -38,59 +39,108 @@ const all = async (req, res) => {
 const add = async (req, res) => {
     const IMAGE_UPLOAD_DIR = `${__dirname}/../public/images/`;
 
-    let form = new multiparty.Form();
+    const folder = req.body.folder;
+    const { image } = req.files;
 
-    form.parse(req, async function (err, fields, files) {
-        if (err) return res.status(400).json({ message: "Failed to parse form data" });
+    if (!folder || !image) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
 
-        const folder = fields.folder && fields.folder[0].toLowerCase();
-        const image = files.image && files.image[0];
+    if (!/^image/.test(image.mimetype)) return res.status(400).json({message: 'nonnnnnn'});
 
-        if (!folder || !image) {
-            return res.status(400).json({ message: "All fields are required" });
+    const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
+
+    try {
+        if (!fs.existsSync(nameFolder)) {
+            fs.mkdirSync(nameFolder, { recursive: true });
         }
+    } catch (e) {
+        return res.status(400).json({ message: 'barlusss'});
+    }
 
-        const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
-        
-        let b = fs.existsSync('/var/task/controllers/public/images');
-        let c = fs.existsSync('/var/task/controllers/public/');
-
-        try {
-            if (!fs.existsSync(nameFolder)) {
-                fs.mkdirSync(nameFolder, { recursive: true });
-            }
-        } catch (e) {
-            return res.status(400).json({ message: e, a,b,c });
-        }
-
-        const imagePath = image.path;
+    const imagePath = image.md5;
         const imageFileName1 = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
         const imageFileName = imageFileName1.slice(imageFileName1.lastIndexOf("/")+1);
         const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
         const imageFullPath = path.join(nameFolder, updatedImageFileName);
         const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
-        let a = fs.existsSync('/var/task/controllers/');
-        // return res.status(500).json({ message: imageURL, imagePath, imageFullPath,imageFileName1, a});
+
+
+        // return res.status(400).json({ message: imageURL + '.jpg'});
+
+    // If does not have image mime type prevent from uploading
+
+    // Move the uploaded image to our upload folder
+    image.mv(`${nameFolder}` + '/' + updatedImageFileName + '.jpg');
+
+    // All good
+    res.status(200).json({message: imageURL + '.jpg' });
+
 
     
-            fs.rename(imagePath, '/var/task/controllers/', (err) => {
-                if (err) {
-                    return res.status(500).json({ message: err, imagePath, imageFullPath });
-                }
-            });
-           
-            const collectionimages = await prisma.collectionimages.create({
-                data: {
-                    folder,
-                    image_name: imageURL,
-                    authorId: req.user.id,
-                },
-            });
+    // let form = new multiparty.Form();
+
+    // form.parse(req, async function (err, fields, files) {
+    //     if (err) return res.status(400).json({ message: "Failed to parse form data" });
+
+    //     const folder = fields.folder && fields.folder[0].toLowerCase();
+    //     const image = files.image && files.image[0];
+
+    //     if (!folder || !image) {
+    //         return res.status(400).json({ message: "All fields are required" });
+    //     }
+
+    //     const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
+        
+    //     // let b = fs.existsSync('/var/task/controllers/public/images');
+    //     // let c = fs.existsSync('/var/task/controllers/public/');
+
+    //     try {
+    //         if (!fs.existsSync(nameFolder)) {
+    //             fs.mkdirSync(nameFolder, { recursive: true });
+    //         }
+    //     } catch (e) {
+    //         return res.status(400).json({ message: e});
+    //     }
+
+    //     const imagePath = image.path;
+    //     const imageFileName1 = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
+    //     const imageFileName = imageFileName1.slice(imageFileName1.lastIndexOf("/")+1);
+    //     const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
+    //     const imageFullPath = path.join(nameFolder, updatedImageFileName);
+    //     const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
+    //     return res.status(500).json({ message: imageURL })
+    //     // let a = fs.existsSync('/var/task/controllers/');
+    //     // return res.status(500).json({ message: imageURL, imagePath, imageFullPath,imageFileName1, a});
+
     
-            return res.status(201).json(collectionimages);
+    //         // fs.rename(imagePath, `${__dirname}/aaa.jpg`, (err) => {
+    //         //     if (err) {
+    //         //         return res.status(500).json({ message: err, imagePath, imageFullPath });
+    //         //     }
+    //         // });
+
+    //         Nfs.writeFile(imagePath, imageFullPath, err => {
+    //             if (err) {
+    //               return res.status(500).json({message: err});
+    //             } else {
+    //               // file written successfully
+    //             }
+    //           });
+            
+    //           return res.status(200).json({message: 'ok'});
+    //         const collectionimages = await prisma.collectionimages.create({
+    //             data: {
+    //                 folder,
+    //                 image_name: imageURL,
+    //                 authorId: req.user.id,
+    //             },
+    //         });
+    
+    //         return res.status(201).json(collectionimages);
 
        
-    });
+    // });
 };
 
 
