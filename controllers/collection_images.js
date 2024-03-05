@@ -4,8 +4,8 @@ const fs = require("fs");
 const Nfs = require('node:fs');
 const path = require("path");
 const { setTimeout } = require("timers/promises");
-const AWS = require('aws-sdk');
-const s3 = new AWS.S3();
+
+const UPLOAD_DIR = path.join(process.cwd(), 'public', 'images');
 
 
 /**
@@ -39,40 +39,41 @@ const all = async (req, res) => {
  */
 
 const add = async (req, res) => {
-    // Check if request contains file
-    if (!req.files || !req.files.image) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
-  
-    // Extract file from request
-    const { image } = req.files;
-  
-    // Define upload directory
-    const UPLOAD_DIR = path.join(__dirname, 'public', 'images');
-  
-    // Create directory if it doesn't exist
-    if (!fs.existsSync(UPLOAD_DIR)) {
-      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-    }
-  
     try {
-      // Generate unique filename
-      const fileName = `${Date.now()}_${image.name}`;
-      const filePath = path.join(UPLOAD_DIR, fileName);
-  
-      // Move file to upload directory
-      await image.mv(filePath);
-  
-      // Construct URL of uploaded file
-      const fileUrl = `https://blossom-belle-cosmetics.vercel.app/images/${fileName}`;
-  
-      // Return URL in response
-      res.status(200).json({ message: "File uploaded successfully", imageUrl: fileUrl });
+        const { image } = req.files;
+
+        // Check if file exists
+        if (!image) {
+            return res.status(400).json({ message: "No file uploaded" });
+        }
+
+        // Validate file type
+        if (!/^image/.test(image.mimetype)) {
+            return res.status(400).json({ message: 'Invalid image format' });
+        }
+
+        // Create the upload directory if it doesn't exist
+        if (!fs.existsSync(UPLOAD_DIR)) {
+            fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+        }
+
+        // Generate unique filename
+        const fileName = `${Date.now()}_${image.name}`;
+        const filePath = path.join(UPLOAD_DIR, fileName);
+
+        // Move file to upload directory
+        await image.mv(filePath);
+
+        // Construct URL of uploaded file
+        const fileUrl = `/images/${fileName}`;
+
+        // Return URL in response
+        res.status(200).json({ message: "File uploaded successfully", imageUrl: fileUrl });
     } catch (err) {
-      console.error("Error uploading file:", err);
-      return res.status(500).json({ message: "Error uploading file" });
+        console.error("Error uploading file:", err);
+        return res.status(500).json({ message: "Error uploading file" });
     }
-  };
+};
 
 
 /**
