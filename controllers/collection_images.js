@@ -38,33 +38,23 @@ const all = async (req, res) => {
 
 const add = async (req, res) => {
     try {
-        const { image } = req.files;
+        // Extract the image filename from the request URL
+        const fileName = req.params.fileName;
 
-        // Check if file exists
-        if (!image) {
-            return res.status(400).json({ message: "No file uploaded" });
-        }
-
-        // Validate file type
-        if (!/^image/.test(image.mimetype)) {
-            return res.status(400).json({ message: 'Invalid image format' });
-        }
-
-        // Generate unique filename
-        const fileName = `${Date.now()}_${image.name}`;
+        // Construct the file path
         const filePath = path.join('/tmp', fileName);
 
-        // Write file to /tmp directory
-        fs.writeFileSync(filePath, image.data);
-
-        // Construct URL of uploaded file
-        const fileUrl = `/images/${fileName}`;
-
-        // Return URL in response
-        res.status(200).json({ message: "File uploaded successfully", imageUrl: fileUrl });
+        // Check if the file exists
+        if (fs.existsSync(filePath)) {
+            // Read the file and send it as the response
+            res.sendFile(filePath);
+        } else {
+            // If the file doesn't exist, return a 404 error
+            res.status(404).json({ message: "File not found" });
+        }
     } catch (err) {
-        console.error("Error uploading file:", err);
-        return res.status(500).json({ message: "Error uploading file" });
+        console.error("Error serving image:", err);
+        return res.status(500).json({ message: "Error serving image" });
     }
 };
 
