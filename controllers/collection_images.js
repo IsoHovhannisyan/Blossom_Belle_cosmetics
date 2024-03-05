@@ -38,10 +38,11 @@ const all = async (req, res) => {
 
 const add = async (req, res) => {
     try {
+        const folder = req.body.folder;
         const { image } = req.files;
 
         // Check if file exists
-        if (!image) {
+        if (!image || !folder) {
             return res.status(400).json({ message: "No file uploaded" });
         }
 
@@ -61,8 +62,16 @@ const add = async (req, res) => {
         const fileUrl = `/images/${fileName}`;
 
         // Return URL in response
-        
-        res.status(200).json({ message: "File uploaded successfully", imageUrl: fileUrl });
+        const collectionimages = await prisma.collectionimages.create({
+                        data: {
+                            folder,
+                            image_name: fileUrl,
+                            authorId: req.user.id,
+                        },
+                    });
+            
+                    return res.status(201).json(collectionimages);
+        // res.status(200).json({ message: "File uploaded successfully", imageUrl: fileUrl });
     } catch (err) {
         console.error("Error uploading file:", err);
         return res.status(500).json({ message: "Error uploading file" });
