@@ -61,16 +61,8 @@ const add = async (req, res) => {
         const fileUrl = `/images/${fileName}`;
 
         // Return URL in response
-        const collectionimages = await prisma.collectionimages.create({
-                        data: {
-                            folder,
-                            image_name: fileUrl,
-                            authorId: req.user.id,
-                        },
-                    });
-            
-                    return res.status(201).json(collectionimages);
-        // res.status(200).json({ message: "File uploaded successfully", imageUrl: fileUrl });
+        
+        res.status(200).json({ message: "File uploaded successfully", imageUrl: fileUrl });
     } catch (err) {
         console.error("Error uploading file:", err);
         return res.status(500).json({ message: "Error uploading file" });
