@@ -39,50 +39,41 @@ const all = async (req, res) => {
  */
 
 const add = async (req, res) => {
-    const IMAGE_UPLOAD_DIR = path.join(__dirname, "..", "public", "images");
+    const IMAGE_UPLOAD_DIR = `${__dirname}/../public/images/`;
 
-    const { folder } = req.body;
+    const folder = req.body.folder;
     const { image } = req.files;
 
-    // Check if folder and image are provided
     if (!folder || !image) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Check if the uploaded file is an image
-    if (!/^image\//.test(image.mimetype)) {
-        return res.status(400).json({ message: "Invalid image format" });
+    if (!/^image/.test(image.mimetype)) {
+        return res.status(400).json({ message: 'Invalid image format' });
     }
 
     const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
 
     try {
-        // Create directory if it doesn't exist
         if (!fs.existsSync(nameFolder)) {
             fs.mkdirSync(nameFolder, { recursive: true });
         }
-    } catch (error) {
-        console.error("Error creating directory:", error);
-        return res.status(500).json({ message: "Internal server error" });
+    } catch (e) {
+        console.error("Error creating directory:", e);
+        return res.status(500).json({ message: 'Internal server error' });
     }
 
-    // Generate unique filename
-    const timestamp = Date.now();
-    const imageFileName = `${folder}_${timestamp}_${image.name}`;
-    const imageFullPath = path.join(nameFolder, imageFileName);
+    const imageFileName = image.name; // Use the original file name
+    const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
+    const imageFullPath = path.join(nameFolder, updatedImageFileName);
 
     try {
-        // Move the uploaded image to the specified directory
         await image.mv(imageFullPath);
-
-        // Construct the URL for the uploaded image
-        const imageURL = path.join("/images", folder, imageFileName).replace(/\\/g, '/');
-
-        // Send the image URL as a response
+        const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
         res.status(200).json({ message: imageURL });
-    } catch (error) {
-        console.error("Error saving image:", error);
-        return res.status(500).json({ message: error });
+    } catch (err) {
+        console.error("Error saving image:", err);
+        return res.status(500).json({ message: err });
     }
 };
 
