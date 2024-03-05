@@ -61,7 +61,16 @@ const add = async (req, res) => {
         const fileUrl = `/images/${fileName}`;
 
         // Return URL in response
-        res.status(200).json({ message: "File uploaded successfully", imageUrl: fileUrl });
+        const collectionimages = await prisma.collectionimages.create({
+                        data: {
+                            folder,
+                            image_name: fileUrl,
+                            authorId: req.user.id,
+                        },
+                    });
+            
+                    return res.status(201).json(collectionimages);
+        // res.status(200).json({ message: "File uploaded successfully", imageUrl: fileUrl });
     } catch (err) {
         console.error("Error uploading file:", err);
         return res.status(500).json({ message: "Error uploading file" });
@@ -100,29 +109,6 @@ const remove = async (req, res) => {
         return res.status(500).json({ message: "Failed to delete" });
     }
 };
-
-const serveImage = async (req, res) => {
-    try {
-        // Extract the image filename from the request URL
-        const fileName = req.params.fileName;
-
-        // Construct the file path
-        const filePath = path.join('/tmp', fileName);
-
-        // Check if the file exists
-        if (fs.existsSync(filePath)) {
-            // Read the file and send it as the response
-            res.sendFile(filePath);
-        } else {
-            // If the file doesn't exist, return a 404 error
-            res.status(404).json({ message: "File not found" });
-        }
-    } catch (err) {
-        console.error("Error serving image:", err);
-        return res.status(500).json({ message: "Error serving image" });
-    }
-};
-
 
 /**
  * 
@@ -223,5 +209,4 @@ module.exports = {
     remove,
     edit,
     collection_image,
-    serveImage
 };
