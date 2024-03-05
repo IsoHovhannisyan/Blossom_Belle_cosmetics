@@ -5,8 +5,6 @@ const Nfs = require('node:fs');
 const path = require("path");
 const { setTimeout } = require("timers/promises");
 
-const UPLOAD_DIR = path.join(process.cwd(), 'public', 'images');
-
 
 /**
  * @route GET api/collection_images/all
@@ -52,17 +50,12 @@ const add = async (req, res) => {
             return res.status(400).json({ message: 'Invalid image format' });
         }
 
-        // Create the upload directory if it doesn't exist
-        if (!fs.existsSync(UPLOAD_DIR)) {
-            fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-        }
-
         // Generate unique filename
         const fileName = `${Date.now()}_${image.name}`;
-        const filePath = path.join(UPLOAD_DIR, fileName);
+        const filePath = path.join('/tmp', fileName);
 
-        // Move file to upload directory
-        await image.mv(filePath);
+        // Write file to /tmp directory
+        fs.writeFileSync(filePath, image.data);
 
         // Construct URL of uploaded file
         const fileUrl = `/images/${fileName}`;
@@ -71,7 +64,7 @@ const add = async (req, res) => {
         res.status(200).json({ message: "File uploaded successfully", imageUrl: fileUrl });
     } catch (err) {
         console.error("Error uploading file:", err);
-        return res.status(500).json({ message: err });
+        return res.status(500).json({ message: "Error uploading file" });
     }
 };
 
