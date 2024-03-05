@@ -71,7 +71,7 @@ const add = async (req, res) => {
         res.status(200).json({ message: "File uploaded successfully", imageUrl: fileUrl });
     } catch (err) {
         console.error("Error uploading file:", err);
-        return res.status(500).json({ message: "Error uploading file" });
+        return res.status(500).json({ message: err });
     }
 };
 
