@@ -39,43 +39,40 @@ const all = async (req, res) => {
  */
 
 const add = async (req, res) => {
-    const IMAGE_UPLOAD_DIR = `${__dirname}/../public/images/`;
-
-    const folder = req.body.folder;
+    // Check if request contains file
+    if (!req.files || !req.files.image) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+  
+    // Extract file from request
     const { image } = req.files;
-
-    if (!folder || !image) {
-        return res.status(400).json({ message: "All fields are required" });
+  
+    // Define upload directory
+    const UPLOAD_DIR = path.join(__dirname, 'public', 'images');
+  
+    // Create directory if it doesn't exist
+    if (!fs.existsSync(UPLOAD_DIR)) {
+      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
     }
-
-    if (!/^image/.test(image.mimetype)) {
-        return res.status(400).json({ message: 'Invalid image format' });
-    }
-
-    const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
-
+  
     try {
-        if (!fs.existsSync(nameFolder)) {
-            fs.mkdirSync(nameFolder, { recursive: true });
-        }
-    } catch (e) {
-        console.error("Error creating directory:", e);
-        return res.status(500).json({ message: 'Internal server error' });
-    }
-
-    const imageFileName = image.name; // Use the original file name
-    const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
-    const imageFullPath = path.join(nameFolder, updatedImageFileName);
-
-    try {
-        await image.mv(imageFullPath);
-        const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
-        res.status(200).json({ message: imageURL });
+      // Generate unique filename
+      const fileName = `${Date.now()}_${image.name}`;
+      const filePath = path.join(UPLOAD_DIR, fileName);
+  
+      // Move file to upload directory
+      await image.mv(filePath);
+  
+      // Construct URL of uploaded file
+      const fileUrl = `https://blossom-belle-cosmetics.vercel.app/images/${fileName}`;
+  
+      // Return URL in response
+      res.status(200).json({ message: "File uploaded successfully", imageUrl: fileUrl });
     } catch (err) {
-        console.error("Error saving image:", err);
-        return res.status(500).json({ message: err });
+      console.error("Error uploading file:", err);
+      return res.status(500).json({ message: "Error uploading file" });
     }
-};
+  };
 
 
 /**
