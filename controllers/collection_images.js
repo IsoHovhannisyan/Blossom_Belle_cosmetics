@@ -101,6 +101,28 @@ const remove = async (req, res) => {
     }
 };
 
+const serveImage = async (req, res) => {
+    try {
+        // Extract the image filename from the request URL
+        const fileName = req.params.fileName;
+
+        // Construct the file path
+        const filePath = path.join('/tmp', fileName);
+
+        // Check if the file exists
+        if (fs.existsSync(filePath)) {
+            // Read the file and send it as the response
+            res.sendFile(filePath);
+        } else {
+            // If the file doesn't exist, return a 404 error
+            res.status(404).json({ message: "File not found" });
+        }
+    } catch (err) {
+        console.error("Error serving image:", err);
+        return res.status(500).json({ message: "Error serving image" });
+    }
+};
+
 
 /**
  * 
@@ -200,5 +222,6 @@ module.exports = {
     add,
     remove,
     edit,
-    collection_image
+    collection_image,
+    serveImage
 };
