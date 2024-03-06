@@ -1,5 +1,5 @@
 const { prisma } = require("../prisma/prisma-client");
-const fs = require('fs');
+
 /**
  * @route GET api/hottour/all
  * @desc Получение всех горяъих туров
@@ -8,7 +8,6 @@ const fs = require('fs');
 
 const all = async (req, res) => {
     const lang = req.query.lang || '';
-
 
     try {
         const products = await prisma.makeup.findMany(lang && {

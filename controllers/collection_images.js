@@ -4,7 +4,6 @@ const fs = require("fs");
 const Nfs = require('node:fs');
 const path = require("path");
 const { setTimeout } = require("timers/promises");
-const { createWriteStream } = require('@vercel/node');
 
 
 /**
@@ -52,29 +51,27 @@ const add = async (req, res) => {
 
         const fileName = `${Date.now()}_${image.name}`;
         const filePath = path.join('/tmp', fileName);
+ 
 
-        const writeStream = createWriteStream(filePath);
-        writeStream.write(image.data);
-        writeStream.end();
+        fs.writeFileSync(filePath, image.data);
 
         const fileUrl = `/images/${fileName}`;
 
+        // Return URL in response
         const collectionimages = await prisma.collectionimages.create({
-            data: {
-                folder,
-                image_name: fileUrl,
-                authorId: req.user.id,
-            },
-        });
-
-        return res.status(201).json(collectionimages);
-
+                        data: {
+                            folder,
+                            image_name: fileUrl,
+                            authorId: req.user.id,
+                        },
+                    });
+                
+                return res.status(201).json(collectionimages);
     } catch (err) {
         console.error("Error uploading file:", err);
         return res.status(500).json({ message: "Error uploading file" });
     }
 };
-
 
 
 /**
