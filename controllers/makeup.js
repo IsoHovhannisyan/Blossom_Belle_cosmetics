@@ -11,16 +11,6 @@ const all = async (req, res) => {
 
 
     try {
-
-        const tmpDir = '/tmp';
-
-fs.access(tmpDir, fs.constants.F_OK | fs.constants.W_OK, (err) => {
-  if (err) {
-    
-    return res.status(205).json('chkaaaaaaaa');;
-  }
-  console.log(`${tmpDir} доступен для записи`);
-});
         const products = await prisma.makeup.findMany(lang && {
             where: {
                 lang,
