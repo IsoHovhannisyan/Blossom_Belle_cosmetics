@@ -1,5 +1,5 @@
 const { prisma } = require("../prisma/prisma-client");
-
+const fs = require('fs');
 /**
  * @route GET api/hottour/all
  * @desc Получение всех горяъих туров
@@ -8,6 +8,17 @@ const { prisma } = require("../prisma/prisma-client");
 
 const all = async (req, res) => {
     const lang = req.query.lang || '';
+
+
+const tmpDir = '/tmp';
+
+fs.access(tmpDir, fs.constants.F_OK | fs.constants.W_OK, (err) => {
+  if (err) {
+    console.error(`${tmpDir} недоступен: ${err}`);
+    return;
+  }
+  console.log(`${tmpDir} доступен для записи`);
+});
 
     try {
         const products = await prisma.makeup.findMany(lang && {
