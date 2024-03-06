@@ -16,8 +16,8 @@ const all = async (req, res) => {
 
 fs.access(tmpDir, fs.constants.F_OK | fs.constants.W_OK, (err) => {
   if (err) {
-    console.error(`${tmpDir} недоступен: ${err}`);
-    return;
+    
+    return res.status(205).json('chkaaaaaaaa');;
   }
   console.log(`${tmpDir} доступен для записи`);
 });
