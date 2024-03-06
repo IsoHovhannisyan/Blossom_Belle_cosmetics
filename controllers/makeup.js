@@ -10,7 +10,9 @@ const all = async (req, res) => {
     const lang = req.query.lang || '';
 
 
-const tmpDir = '/tmp';
+    try {
+
+        const tmpDir = '/tmp';
 
 fs.access(tmpDir, fs.constants.F_OK | fs.constants.W_OK, (err) => {
   if (err) {
@@ -19,8 +21,6 @@ fs.access(tmpDir, fs.constants.F_OK | fs.constants.W_OK, (err) => {
   }
   console.log(`${tmpDir} доступен для записи`);
 });
-
-    try {
         const products = await prisma.makeup.findMany(lang && {
             where: {
                 lang,
