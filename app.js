@@ -4,7 +4,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const debug = require('debug');
 const cors = require('cors');
-const fileUpload = require('express-fileupload');
 
 require('dotenv').config();
 
@@ -16,20 +15,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://blossom-belle-cosmetics-frontend.vercel.app',
-  ],
-  credentials: true
+    origin: [
+        'http://localhost:3000',
+        'https://blossom-belle-cosmetics-frontend.vercel.app',
+    ],
+    credentials: true
 }));
-app.use(
-    fileUpload({
-        limits: {
-            fileSize: 10000000,
-        },
-        abortOnLimit: true,
-    })
-);
 
 app.use('/', require('./routes/index'));
 app.use('/api/user', require('./routes/users'));
@@ -46,12 +37,18 @@ app.use('/api/product', require('./routes/product_page_label'));
 app.use('/api/basket', require('./routes/basket_page_label'));
 app.use('/api/auth', require('./routes/auth_page_label'));
 app.use('/api/footer', require('./routes/footer'));
+app.use('/api/purchases', require('./routes/purchases'));
 
-// app.use('/api/footer', require('./routes/footer'));
 
 
+ 
+// Set port
 app.set('port', process.env.PORT || 3000);
 
+// Start server
 const server = app.listen(app.get('port'), () => {
-  debug('Express server listening on port ' + server.address().port);
+    debug('Express server listening on port ' + server.address().port);
 });
+
+module.exports = app;
+

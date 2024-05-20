@@ -8,21 +8,23 @@ const { prisma } = require("../prisma/prisma-client");
 
 const all = async (req, res) => {
     const lang = req.query.lang || '';
+    const imagePath = req.query.imagePath || ''; // New parameter for image path
 
     try {
-        // await prisma.brush.updateMany({
-        //     where: {
-        //         lang: 'en'
-        //     },
-        //     data: {
-        //       btn_text: 'Watch',
-        //     },
-        //   });
-        const products = await prisma.brush.findMany(lang && {
-            where: {
-                lang,
-            },
-        });
+        let products;
+        if (imagePath) {
+            products = await prisma.brush.findMany({
+                where: {
+                    image: imagePath, // Filter by image path
+                },
+            });
+        } else {
+            products = await prisma.brush.findMany(lang && {
+                where: {
+                    lang,
+                },
+            });
+        }
 
         res.status(200).json(products);
     } catch {
@@ -105,6 +107,27 @@ const edit = async (req, res) => {
     }
 };
 
+const editForUser = async (req, res) => {
+    
+    const quantity = req.body.quantity;
+    
+    const image = req.body.image;
+
+    try {
+        await prisma.brush.updateMany({
+            where: {
+                image: image
+            },
+            data: {
+              quantity: quantity
+            },
+          });
+        return res.status(200).json('ok');
+    } catch(err) {
+        res.status(500).json({ message: err });
+    }
+};
+
 
 /**
  * 
@@ -135,5 +158,6 @@ module.exports = {
     add,
     remove,
     edit,
+    editForUser,
     brush,
 };

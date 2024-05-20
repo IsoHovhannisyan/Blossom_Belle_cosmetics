@@ -1,9 +1,7 @@
 const { prisma } = require("../prisma/prisma-client");
 const multiparty = require("multiparty");
 const fs = require("fs");
-const Nfs = require('node:fs');
 const path = require("path");
-const { setTimeout } = require("timers/promises");
 
 
 /**
@@ -37,40 +35,62 @@ const all = async (req, res) => {
  */
 
 const add = async (req, res) => {
-    try {
-        const folder = req.body.folder;
-        const { image } = req.files;
+    const IMAGE_UPLOAD_DIR = './public/images/';
 
-        if (!image || !folder) {
-            return res.status(400).json({ message: "No file uploaded" });
+    let form = new multiparty.Form();
+
+    form.parse(req, async function (err, fields, files) {
+        if (err) {
+            console.error('Error parsing form data:', err);
+            return res.status(400).json({ message: "Failed to parse form data" });
         }
 
-        if (!/^image/.test(image.mimetype)) {
-            return res.status(400).json({ message: 'Invalid image format' });
+        const folder = fields.folder && fields.folder[0].toLowerCase();
+        const image = files.image && files.image[0];
+
+        if (!folder || !image) {
+            return res.status(400).json({ message: "All fields are required" });
         }
 
-        const fileName = `${Date.now()}_${image.name}`;
-        const filePath = path.join('/tmp', fileName);
- 
+        const nameFolder = path.join(IMAGE_UPLOAD_DIR, folder);
 
-        fs.writeFileSync(filePath, image.data);
+        try {
+            if (!fs.existsSync(nameFolder)) {
+                fs.mkdirSync(nameFolder, { recursive: true });
+            }
+        } catch (e) {
+            console.error('Error creating folder:', e);
+            return res.status(500).json({ message: "Failed to create folder" });
+        }
 
-        const fileUrl = `/images/${fileName}`;
+        const imagePath = image.path;
+        const imageFileName = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
+        const updatedImageFileName = `${folder}_${Date.now()}_${imageFileName}`;
+        const imageFullPath = path.join(nameFolder, updatedImageFileName);
+        const imageURL = path.join("/images", folder, updatedImageFileName).replace(/\\/g, '/');
 
-        // Return URL in response
-        const collectionimages = await prisma.collectionimages.create({
-                        data: {
-                            folder,
-                            image_name: fileUrl,
-                            authorId: req.user.id,
-                        },
-                    });
-                
-                return res.status(201).json(collectionimages);
-    } catch (err) {
-        console.error("Error uploading file:", err);
-        return res.status(500).json({ message: "Error uploading file" });
-    }
+        fs.rename(imagePath, imageFullPath, (err) => {
+            if (err) {
+                console.error('Error renaming the file:', err);
+                return res.status(500).json({ message: "Failed to rename file" });
+            }
+            console.log('File successfully renamed');
+        });
+
+        try {
+            const collectionimages = await prisma.collectionimages.create({
+                data: {
+                    folder,
+                    image_name: imageURL,
+                    authorId: req.user.id,
+                },
+            });
+            return res.status(201).json(collectionimages);
+        } catch (error) {
+            console.error('Error creating database entry:', error);
+            return res.status(500).json({ message: "Failed to create database entry" });
+        }
+    });
 };
 
 
@@ -90,21 +110,25 @@ const remove = async (req, res) => {
     }
 
     try {
+
+        fs.unlink(`./public/`+ data.fileName, (err) => {
+            if (err) {
+                return res.status(400).json({ message: "Failed to delete local image:" });
+            }
+        });
+
         await prisma.collectionimages.delete({
             where: {
                 id,
             },
         });
-        // fs.unlink(`./public/`+ data.fileName, (err) => {
-        //     if (err) {
-        //         return res.status(400).json({ message: "Failed to delete local image:" });
-        //     }
-        // });
+        
         return res.status(200).json("OK");
     } catch(err) {
         return res.status(500).json({ message: "Failed to delete" });
     }
 };
+
 
 /**
  * 
@@ -204,5 +228,5 @@ module.exports = {
     add,
     remove,
     edit,
-    collection_image,
+    collection_image
 };

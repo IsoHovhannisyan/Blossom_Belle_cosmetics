@@ -1,21 +1,29 @@
 const { prisma } = require("../prisma/prisma-client");
 
 /**
- * @route GET api/hottour/all
- * @desc Получение всех горяъих туров
+ * @route GET api/makeup
+ * @desc Получение всех
  * @access Private
  */
 
 const all = async (req, res) => {
     const lang = req.query.lang || '';
-
+    const imagePath = req.query.imagePath || ''; // New parameter for image path
     try {
-        const products = await prisma.makeup.findMany(lang && {
-            where: {
-                lang,
-            },
-        });
-        
+        let products;
+        if (imagePath) {
+            products = await prisma.makeup.findMany({
+                where: {
+                    image: imagePath, // Filter by image path
+                },
+            });
+        } else {
+            products = await prisma.makeup.findMany(lang && {
+                where: {
+                    lang,
+                },
+            });
+        }
 
         res.status(200).json(products);
     } catch {
@@ -26,8 +34,8 @@ const all = async (req, res) => {
 
 /**
  * 
- * @route POST api/hottour/add
- * @desc Добавление тура
+ * @route POST api//add
+ * @desc 
  * @access Private
  */
 
@@ -98,10 +106,31 @@ const edit = async (req, res) => {
     }
 };
 
+const editForUser = async (req, res) => {
+    
+    const quantity = req.body.quantity;
+    
+    const image = req.body.image;
+
+    try {
+        await prisma.makeup.updateMany({
+            where: {
+                image: image
+            },
+            data: {
+              quantity: quantity
+            },
+          });
+        return res.status(200).json('ok');
+    } catch(err) {
+        res.status(500).json({ message: err });
+    }
+};
+
 
 /**
  * 
- * @route GET api/hottour/:id
+ * @route GET api/makeup/:id
  * @desc Полчуние сотрудника
  * @access Private
  */
@@ -128,6 +157,7 @@ module.exports = {
     add,
     remove,
     edit,
+    editForUser,
     makeup,
 };
 

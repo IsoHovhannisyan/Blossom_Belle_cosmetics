@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { all, add, remove, edit, hair } = require("../controllers/hair");
+const { all, add, remove, edit, editForUser, hair } = require("../controllers/hair");
 const { auth } = require("../middleware/auth");
 
 
@@ -9,5 +9,6 @@ router.get('/:id', hair);
 router.post('/add',auth, add);
 router.post('/remove/:id', auth, remove);
 router.put('/edit/:id', auth, edit);
+router.put('/editforuser', auth, editForUser);
 
 module.exports = router;
